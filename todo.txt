@@ -1,2 +1,6 @@
-* get a GUI for modifying constants
+x get a GUI for modifying constants
+* get the GUI to write to a config file so we can save things
 * make it follow a line instead of just being straight into the distance
+	* should there be a tunnel factor here? If it bends enough you can't see around the corner?
+* make it actually loop forever
+* fade into the distance?
