@@ -1,0 +1,2 @@
+* get a GUI for modifying constants
+* make it follow a line instead of just being straight into the distance
