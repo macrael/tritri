@@ -4,3 +4,6 @@ x get a GUI for modifying constants
 	* should there be a tunnel factor here? If it bends enough you can't see around the corner?
 * make it actually loop forever
 * fade into the distance?
+* better color pallet
+
+* make things further away have greater radius?
