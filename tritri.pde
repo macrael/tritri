@@ -5,7 +5,6 @@ float rad;
 // Angle and angular velocity, accleration
 float theta;
 float theta_vel;
-float theta_acc;
 
 int layerCount = 500;
 float[] colors;
@@ -16,7 +15,6 @@ float rotation_modifier = 4;
 float vertical_spacing = 42.0;
 float diameter = 20.0;
 float forward_speed = 3.0;
-float radin = 0.0;
 
 SliderConfig[] sliders = {
   new SliderConfig("rotation_modifier", 1.0, 10.0),
@@ -33,7 +31,6 @@ void setup() {
   rad = height * 0.15;
   theta = 0;
   theta_vel = .005;
-  theta_acc = 0;
   forward = 0;
 
   setupColors();
@@ -111,12 +108,9 @@ void draw() {
   // Translate the origin point to the center of the screen
   translate(width/2, height/2, forward);
 
-  float rot_spin = (sin(radin) + 1);
-  radin += .0001;
-
   for (float i = 0; i < layerCount; i++) {
     float r = rad;
-    float offset = (PI / (rotation_modifier + rot_spin)) * (i - 1);
+    float offset = (PI / (rotation_modifier)) * (i - 1);
     float d = diameter;
     float z = (i - 450) * vertical_spacing;
 
@@ -129,8 +123,7 @@ void draw() {
     drawTri( r, theta + offset, d, z, red, green, blue);
   }
 
-  theta_vel += theta_acc;
-  //theta += theta_vel;
+  theta += theta_vel;
 
   forward += forward_speed;
 
