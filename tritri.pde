@@ -15,12 +15,14 @@ float rotation_modifier = 4;
 float vertical_spacing = 42.0;
 float diameter = 20.0;
 float forward_speed = 3.0;
+float forward_offset = 200;
 
 SliderConfig[] sliders = {
   new SliderConfig("rotation_modifier", 1.0, 10.0),
   new SliderConfig("vertical_spacing", 0.0, 200.0),
   new SliderConfig("diameter", 0.0, 100.0),
-  new SliderConfig("forward_speed", 0.0, 20.0)
+  new SliderConfig("forward_speed", 0.0, 20.0),
+  new SliderConfig("forward_offset", 0.0, 1000.0)
 };
 
 
@@ -31,7 +33,7 @@ void setup() {
   rad = height * 0.15;
   theta = 0;
   theta_vel = .005;
-  forward = 0;
+  forward = - width * 2 ;
 
   setupColors();
   setupGUI();
@@ -76,10 +78,17 @@ void setupGUI() {
 
 }
 
+PVector curveFn(float z) {
+  float y = pow(z / 80, 2);
+  return new PVector(0, y, z);
+}
+
 void drawTri(float r, float t, float d, float z, float red, float green, float blue) {
 
   pushMatrix();
-  translate(0,0,z);
+
+  PVector curve = curveFn(z);
+  translate(curve.x, curve.y, z);
 
   for (float i = 0; i < 3; i++) {
 
@@ -91,6 +100,11 @@ void drawTri(float r, float t, float d, float z, float red, float green, float b
     ellipseMode(CENTER);
     noStroke();
     fill(red, green, blue);
+    // pushMatrix();
+    // translate(x, y, 0);
+    // sphere(d);
+    // translate(-x, -y, 0);
+    // popMatrix();
     ellipse(x, y, d, d);
 
   }
@@ -106,7 +120,14 @@ void draw() {
   pushMatrix();
 
   // Translate the origin point to the center of the screen
-  translate(width/2, height/2, forward);
+  translate(width/2, height/2, 0);
+  PVector curve = curveFn(forward);
+  float lookahead = 400;
+  PVector center = curveFn(forward + lookahead);
+  // translate(curve.x, -curve.y, forward + forward_offset);
+  camera(curve.x, curve.y, curve.z,
+              center.x, center.y, center.z,
+              0, 1, 0);
 
   for (float i = 0; i < layerCount; i++) {
     float r = rad;
