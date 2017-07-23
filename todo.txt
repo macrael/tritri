@@ -1,9 +1,11 @@
 x get a GUI for modifying constants
-* get the GUI to write to a config file so we can save things
 x make it follow a line instead of just being straight into the distance
+* have it turn at random into the distance.
+* get the GUI to write to a config file so we can save things
 * should there be a tunnel factor here? If it bends enough you can't see around the corner?
+	* gonna have to be better, tunnel isn't right, got to determine which circle should be visible
 * make it actually loop forever
 * fade into the distance?
-* better color pallet
-
+* better color palette
+	* https://stackoverflow.com/questions/43044/algorithm-to-randomly-generate-an-aesthetically-pleasing-color-palette
 * make things further away have greater radius?

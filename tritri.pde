@@ -19,6 +19,7 @@ float forward_offset = 400;
 float sin_scale_factor = 100;
 float fn_amplitude = 100;
 float lookahead_modifier = 5;
+float tube_radius_buffer = 30;
 // --/Fiddles--
 
 SliderConfig[] sliders = {
@@ -31,6 +32,7 @@ SliderConfig[] sliders = {
   new SliderConfig("sin_scale_factor", 0, 400.0),
   new SliderConfig("fn_amplitude", 0, 400.0),
   new SliderConfig("lookahead_modifier", 0, 50.0),
+  new SliderConfig("tube_radius_buffer", 0, 100.0),
   // --/Sliders
 };
 
@@ -92,6 +94,23 @@ PVector curveFn(float z) {
   return new PVector(0, y, z);
 }
 
+void drawNextTubeSection(PShape tube, float radius, float z, float spacing) {
+
+  int sides = 10;
+  float angle = 2 * PI / sides;
+
+  PVector curve = curveFn(z);
+  PVector nextCurve = curveFn(z + spacing);
+
+  for (int i = 0; i < sides; i++) {
+    float x = cos(i * angle) * radius;
+    float y = sin(i * angle) * radius;
+    tube.vertex(x + curve.x, y + curve.y, z);
+    tube.vertex(x + nextCurve.x, y + nextCurve.y, z + spacing);
+  }
+
+}
+
 void drawTri(float r, float t, float d, float z, float red, float green, float blue) {
 
   pushMatrix();
@@ -136,6 +155,13 @@ void draw() {
               center.x, center.y, center.z + forward_offset * lookahead_modifier,
               0, 1, 0);
 
+  PShape tube = createShape();
+  tube.beginShape(TRIANGLE_STRIP);
+  tube.fill(0, 0, 0);
+  // tube.stroke(0, 255, 0);
+  tube.noStroke();
+  // tube.strokeWeight(1);
+
   for (float i = 0; i < layerCount; i++) {
     float r = rad;
     float offset = (PI / (rotation_modifier)) * (i - 1);
@@ -149,7 +175,12 @@ void draw() {
     //println(r);
     //println(offset);
     drawTri( r, theta + offset, d, z, red, green, blue);
+
+    drawNextTubeSection(tube, r + tube_radius_buffer, z, vertical_spacing);
   }
+
+  tube.endShape(CLOSE);
+  shape(tube);
 
   theta += theta_vel;
 
