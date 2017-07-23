@@ -18,6 +18,7 @@ float forward_speed = 3.0;
 float forward_offset = 400;
 float sin_scale_factor = 100;
 float fn_amplitude = 100;
+float lookahead_modifier = 5;
 // --/Fiddles--
 
 SliderConfig[] sliders = {
@@ -29,6 +30,7 @@ SliderConfig[] sliders = {
   new SliderConfig("forward_offset", 0.0, 1000.0),
   new SliderConfig("sin_scale_factor", 0, 400.0),
   new SliderConfig("fn_amplitude", 0, 400.0),
+  new SliderConfig("lookahead_modifier", 0, 50.0),
   // --/Sliders
 };
 
@@ -121,7 +123,6 @@ void drawTri(float r, float t, float d, float z, float red, float green, float b
 
 void draw() {
 
-
   background(0);
 
   pushMatrix();
@@ -132,14 +133,14 @@ void draw() {
   println(forward);
   PVector center = curveFn(forward + forward_offset);
   camera(curve.x, curve.y, curve.z,
-              center.x, center.y, center.z,
+              center.x, center.y, center.z + forward_offset * lookahead_modifier,
               0, 1, 0);
 
   for (float i = 0; i < layerCount; i++) {
     float r = rad;
     float offset = (PI / (rotation_modifier)) * (i - 1);
     float d = diameter;
-    float z = (i - 450) * vertical_spacing;
+    float z = (i - 100) * vertical_spacing;
 
     float red = colors[int(i) * 3];
     float green = colors[int(i) * 3 + 1];
