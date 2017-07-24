@@ -18,7 +18,7 @@ float forward_speed = 3.0;
 float forward_offset = 400;
 float sin_scale_factor = 100;
 float fn_amplitude = 100;
-float lookahead_modifier = 5;
+float lookahead_modifier = .5;
 float tube_radius_buffer = 30;
 // --/Fiddles--
 
@@ -31,7 +31,7 @@ SliderConfig[] sliders = {
   new SliderConfig("forward_offset", 0.0, 1000.0),
   new SliderConfig("sin_scale_factor", 0, 400.0),
   new SliderConfig("fn_amplitude", 0, 400.0),
-  new SliderConfig("lookahead_modifier", 0, 50.0),
+  new SliderConfig("lookahead_modifier", 0, 10.0),
   new SliderConfig("tube_radius_buffer", 0, 100.0),
   // --/Sliders
 };
@@ -91,7 +91,9 @@ void setupGUI() {
 
 PVector curveFn(float z) {
   float y = fn_amplitude * sin(z / (sin_scale_factor * PI));
-  return new PVector(0, y, z);
+  float x = -fn_amplitude * cos(z / (sin_scale_factor * PI));
+
+  return new PVector(x, y, z);
 }
 
 void drawNextTubeSection(PShape tube, float radius, float z, float spacing) {
@@ -180,7 +182,7 @@ void draw() {
   }
 
   tube.endShape(CLOSE);
-  shape(tube);
+  // shape(tube);
 
   theta += theta_vel;
 
