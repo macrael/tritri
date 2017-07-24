@@ -1,11 +1,20 @@
 x get a GUI for modifying constants
 x make it follow a line instead of just being straight into the distance
 * have it turn at random into the distance.
+	* https://www.google.com/search?client=safari&rls=en&q=perlin+noise&ie=UTF-8&oe=UTF-8
+	* noise() is a builtin. seems like we should be able to make it work
 * get the GUI to write to a config file so we can save things
 * should there be a tunnel factor here? If it bends enough you can't see around the corner?
 	* gonna have to be better, tunnel isn't right, got to determine which circle should be visible
+	* get controls to draw on top.
 * make it actually loop forever
 * fade into the distance?
 * better color palette
 	* https://stackoverflow.com/questions/43044/algorithm-to-randomly-generate-an-aesthetically-pleasing-color-palette
 * make things further away have greater radius?
+
+
+
+How to make the tunnel turn in random directions?
+	* the mountin function, midpoint displacement, could be the thing?, then we have to store it though.
+	* it's a random walk function?

@@ -20,6 +20,8 @@ float sin_scale_factor = 100;
 float fn_amplitude = 100;
 float lookahead_modifier = .5;
 float tube_radius_buffer = 30;
+float noise_shrinker = 1000;
+float noise_grower = 30;
 // --/Fiddles--
 
 SliderConfig[] sliders = {
@@ -33,6 +35,8 @@ SliderConfig[] sliders = {
   new SliderConfig("fn_amplitude", 0, 400.0),
   new SliderConfig("lookahead_modifier", 0, 10.0),
   new SliderConfig("tube_radius_buffer", 0, 100.0),
+  new SliderConfig("noise_shrinker", 0, 2020.0),
+  new SliderConfig("noise_grower", 0, 300.0),
   // --/Sliders
 };
 
@@ -93,7 +97,14 @@ PVector curveFn(float z) {
   float y = fn_amplitude * sin(z / (sin_scale_factor * PI));
   float x = -fn_amplitude * cos(z / (sin_scale_factor * PI));
 
-  return new PVector(x, y, z);
+  float xNoise = noise(z/noise_shrinker, -50);
+  float yNoise = noise(z/noise_shrinker, 50);
+
+  y = y + (yNoise - 1/2) * noise_grower;
+  x = x + (xNoise - 1/2) * noise_grower;
+
+
+  return new PVector(xNoise * 1000, yNoise * 1000, z);
 }
 
 void drawNextTubeSection(PShape tube, float radius, float z, float spacing) {
@@ -151,7 +162,7 @@ void draw() {
   // Translate the origin point to the center of the screen
   translate(width/2, height/2, 0);
   PVector curve = curveFn(forward);
-  println(forward);
+  println(noise(100, -50));
   PVector center = curveFn(forward + forward_offset);
   camera(curve.x, curve.y, curve.z,
               center.x, center.y, center.z + forward_offset * lookahead_modifier,
@@ -182,7 +193,7 @@ void draw() {
   }
 
   tube.endShape(CLOSE);
-  // shape(tube);
+  shape(tube);
 
   theta += theta_vel;
 
