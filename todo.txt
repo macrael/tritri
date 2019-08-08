@@ -7,6 +7,7 @@ x make it follow a line instead of just being straight into the distance
 * should there be a tunnel factor here? If it bends enough you can't see around the corner?
 	* gonna have to be better, tunnel isn't right, got to determine which circle should be visible
 	* get controls to draw on top.
+		* http://www.sojamo.de/libraries/controlP5/examples/extra/ControlP5controllerOnTop3D/ControlP5controllerOnTop3D.pde ?
 * make it actually loop forever
 * fade into the distance?
 * better color palette

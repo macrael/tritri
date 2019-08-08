@@ -20,8 +20,8 @@ float sin_scale_factor = 100;
 float fn_amplitude = 100;
 float lookahead_modifier = .5;
 float tube_radius_buffer = 30;
-float noise_shrinker = 1000;
-float noise_grower = 30;
+float noise_shrinker = 2000;
+float noise_grower = 2000;
 // --/Fiddles--
 
 SliderConfig[] sliders = {
@@ -35,8 +35,8 @@ SliderConfig[] sliders = {
   new SliderConfig("fn_amplitude", 0, 400.0),
   new SliderConfig("lookahead_modifier", 0, 10.0),
   new SliderConfig("tube_radius_buffer", 0, 100.0),
-  new SliderConfig("noise_shrinker", 0, 2020.0),
-  new SliderConfig("noise_grower", 0, 300.0),
+  new SliderConfig("noise_shrinker", 0, 4000.0),
+  new SliderConfig("noise_grower", 0, 3000.0),
   // --/Sliders
 };
 
@@ -103,8 +103,13 @@ PVector curveFn(float z) {
   y = y + (yNoise - 1/2) * noise_grower;
   x = x + (xNoise - 1/2) * noise_grower;
 
+  return new PVector(x, y, z);
+}
 
-  return new PVector(xNoise * 1000, yNoise * 1000, z);
+PVector lookaheadPoint(float z) {
+  PVector center = curveFn(z + forward_offset);
+  center.z = center.z + forward_offset * lookahead_modifier;
+  return center;
 }
 
 void drawNextTubeSection(PShape tube, float radius, float z, float spacing) {
@@ -163,16 +168,17 @@ void draw() {
   translate(width/2, height/2, 0);
   PVector curve = curveFn(forward);
   println(noise(100, -50));
-  PVector center = curveFn(forward + forward_offset);
+  PVector center = lookaheadPoint(forward);
   camera(curve.x, curve.y, curve.z,
-              center.x, center.y, center.z + forward_offset * lookahead_modifier,
+              center.x, center.y, center.z,
               0, 1, 0);
 
   PShape tube = createShape();
   tube.beginShape(TRIANGLE_STRIP);
   tube.fill(0, 0, 0);
-  // tube.stroke(0, 255, 0);
-  tube.noStroke();
+  tube.stroke(0, 255, 0);
+  // tube.noStroke();
+  tube.noFill();
   // tube.strokeWeight(1);
 
   for (float i = 0; i < layerCount; i++) {
@@ -193,7 +199,7 @@ void draw() {
   }
 
   tube.endShape(CLOSE);
-  shape(tube);
+  // shape(tube);
 
   theta += theta_vel;
 
